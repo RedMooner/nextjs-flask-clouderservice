@@ -11,3 +11,33 @@ Clouder has a simple and intuitive interface that allows users to easily upload,
 Clouder uses Next technologies.js and React.js for creating a fast and responsive interface, as well as Python and Flask for processing requests and managing data on the server.
 
 In general, Clouder is a reliable and secure cloud storage system that provides a high level of data protection
+
+# Python packages
+| Package             | Version   |
+|---------------------|-----------|
+| appdirs             | 1.4.4     |
+| blinker             | 1.6.2     |
+| caugetch            | 0.0.1     |
+| click               | 8.1.7     |
+| clipboard           | 0.0.4     |
+| colorama            | 0.4.6     |
+| Flask               | 2.3.3     |
+| Flask-Cors          | 4.0.0     |
+| Flask-JWT-Extended  | 4.5.2     |
+| fs                  | 2.4.16    |
+| getpass4            | 0.0.14.1  |
+| gnupg               | 2.3.1     |
+| greenlet            | 2.0.2     |
+| itsdangerous        | 2.1.2     |
+| Jinja2              | 3.1.2     |
+| MarkupSafe          | 2.1.3     |
+| pip                 | 22.3.1    |
+| psutil              | 5.9.5     |
+| PyJWT               | 2.8.0     |
+| pyperclip           | 1.8.2     |
+| python-gnupg        | 0.5.1     |
+| setuptools          | 65.5.1    |
+| six                 | 1.16.0    |
+| SQLAlchemy          | 2.0.21    |
+| typing_extensions   | 4.8.0     |
+| Werkzeug            | 2.3.7     |
