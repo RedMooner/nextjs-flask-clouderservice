@@ -9,7 +9,7 @@ CORS(app)
 def home():
     return jsonify(
         {
-            'message': 'Hello World from py!'
+            'message': 'Hello World from pyt!'
         })
 
 
