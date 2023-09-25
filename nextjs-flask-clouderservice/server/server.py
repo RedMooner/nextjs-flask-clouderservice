@@ -49,7 +49,8 @@ def login():
 
 @app.route("/api/getfiles", methods=['GET'])
 def getfiles():
-    pass
+    decrypt()
+    return jsonify("getfiles");
 
 @app.route("/api/uploadFile", methods=['GET'])
 def uploadFile():

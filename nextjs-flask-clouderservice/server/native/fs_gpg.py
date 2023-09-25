@@ -42,9 +42,22 @@ def encrypt():
     recipient = debug_mail
     subprocess.run(['gpg', '--recipient', recipient, '--encrypt', "my-unencrypted.txt", "-y"])
 
-def decrypt(key_name):
-    pass
+def decrypt():
+    # Укажите путь к файлу, который нужно расшифровать
+    input_file = 'my-unencrypted.txt.gpg'
+    # Укажите путь для сохранения расшифрованного файла
+    output_file = 'file.txt'
+    # Запустите команду gpg в терминале
+    password = '123'
+    result = subprocess.run(['gpg', '--batch', '--passphrase', password, '--output', output_file, '--decrypt', input_file])
 
-
+    if result.returncode == 0:
+        # Расшифровка прошла успешно
+        with open(output_file, 'r') as f:
+            decrypted_text = f.read()
+        print(decrypted_text)
+    else:
+        # Произошла ошибка при расшифровке
+        print('Ошибка расшифровки файла')
 if __name__ == '__main__':
     pass
