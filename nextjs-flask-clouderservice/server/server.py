@@ -1,5 +1,6 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
+from flask_jwt_extended import jwt_required
 import sqlalchemy as db
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy import create_engine
@@ -23,6 +24,7 @@ from models.models import *  # import all models
 
 Base.metadata.create_all(bind=engine)  # create all tables
 
+@jwt_required
 @app.route("/api/home", methods=['GET'])
 def home():
     return jsonify(
@@ -37,21 +39,24 @@ def register():
         {
             'message': 'you are succesfully registered !'
         })
+
 @app.route("/api/logout", methods=['POST'])
 def logout():
     pass
+
 @app.route("/api/login", methods=['POST'])
 def login():
     pass
 
 
 #cloude service endpoints
-
+@jwt_required
 @app.route("/api/getfiles", methods=['GET'])
 def getfiles():
     decrypt()
     return jsonify("getfiles");
 
+@jwt_required
 @app.route("/api/uploadFile", methods=['GET'])
 def uploadFile():
     encrypt()
