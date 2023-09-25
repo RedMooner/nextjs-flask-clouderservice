@@ -32,7 +32,7 @@ def home():
 
 @app.route("/api/register", methods=['GET'])
 def register():
-    generate_key("test","test","123","123")
+    generate_key("test","test","mail.ru","123")
     return jsonify(
         {
             'message': 'you are succesfully registered !'
@@ -53,8 +53,8 @@ def getfiles():
 
 @app.route("/api/uploadFile", methods=['GET'])
 def uploadFile():
-    pass
-
+    encrypt()
+    return  jsonify("uploadFile");
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
