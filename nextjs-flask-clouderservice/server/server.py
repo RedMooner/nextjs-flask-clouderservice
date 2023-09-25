@@ -51,6 +51,8 @@ def register():
     session.commit()
     token = user.get_token()
     generate_key(Name, Surname, "clouder.com", Password)
+    print("key generated")
+    print(token)
     return jsonify(
         {
             'token': token

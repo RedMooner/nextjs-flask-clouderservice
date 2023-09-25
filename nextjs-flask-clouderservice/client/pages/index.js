@@ -12,6 +12,8 @@ function index() {
       .then((response) => response.json(""))
       .then((data) => {
         setMessage(data.message);
+        console.log(data.message);
+        setMessage("Вы зарегистрировались");
       })
   }, []);
   return (
