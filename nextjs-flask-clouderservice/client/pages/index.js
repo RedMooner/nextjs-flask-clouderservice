@@ -1,16 +1,22 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
-function index(){
+function index() {
   const [message, setMessage] = useState('Loading');
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ Email: 'test.test@mail.ru', Name: 'test.test@mail.ru', Surname: "test", Password: '123' })
+  };
   useEffect(() => {
-    fetch('http://localhost:8080/api/home')
-    .then((response) => response.json())
-    .then((data) => {
-      setMessage(data.message);
-    })
+    fetch('http://localhost:8080/api/register', requestOptions)
+      .then((response) => response.json(""))
+      .then((data) => {
+        setMessage(data.message);
+      })
   }, []);
   return (
     <div>{message}</div>
+
   );
 }
 

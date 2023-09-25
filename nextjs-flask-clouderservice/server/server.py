@@ -1,13 +1,17 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
-from flask_jwt_extended import jwt_required
 import sqlalchemy as db
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from native.fs_gpg import *
+from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
+from Config import Config
 # app instance
 app = Flask(__name__)  # create an instance of Flask
+
+app.config.from_object(Config)
+
 CORS(app)  # enable cross-origin resource sharing
 
 engine = create_engine('sqlite:///database.db')  # database
@@ -21,10 +25,13 @@ Base.query = session.query_property()  # add query methods to the base class
 
 
 from models.models import *  # import all models
-
+jwt = JWTManager(app)
+#Base.metadata.drop_all(bind=engine) # create all tables
 Base.metadata.create_all(bind=engine)  # create all tables
 
-@jwt_required
+
+
+@jwt_required()
 @app.route("/api/home", methods=['GET'])
 def home():
     return jsonify(
@@ -32,39 +39,54 @@ def home():
             'message': 'Hello World from pyt!'
         })
 
-@app.route("/api/register", methods=['GET'])
+
+@app.route("/api/register", methods=['POST'])
 def register():
-    generate_key("test","test","mail.ru","123")
+    Name = request.json['Name']
+    Surname = request.json['Surname']
+    Email  = request.json['Email']
+    Password = request.json['Password']
+    user = User(Name, Email, Password)
+    session.add(user)
+    session.commit()
+    token = user.get_token()
+    generate_key(Name, Surname, "clouder.com", Password)
     return jsonify(
         {
-            'message': 'you are succesfully registered !'
+            'token': token
         })
+
 
 @app.route("/api/logout", methods=['POST'])
 def logout():
     pass
 
+
 @app.route("/api/login", methods=['POST'])
-def login():
-    pass
+def login(username=None, password=None):
+    user = User.authenticate(username, password)
+    token = user.get_token()
+    return {'access_token': token}
+
+# cloude service endpoints
 
 
-#cloude service endpoints
-@jwt_required
 @app.route("/api/getfiles", methods=['GET'])
 def getfiles():
     decrypt()
-    return jsonify("getfiles");
+    return jsonify("getfiles")
 
-@jwt_required
+
 @app.route("/api/uploadFile", methods=['GET'])
 def uploadFile():
     encrypt()
-    return  jsonify("uploadFile");
+    return jsonify("uploadFile")
+
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     session.remove()
+
 
 if (__name__ == '__main__'):
     app.run(debug=True, port=8080)  # run app in debug mode
