@@ -1,3 +1,4 @@
+from models.models import *  # import all models
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import sqlalchemy as db
@@ -24,11 +25,9 @@ Base = declarative_base()  # create a base class
 Base.query = session.query_property()  # add query methods to the base class
 
 
-from models.models import *  # import all models
 jwt = JWTManager(app)
-#Base.metadata.drop_all(bind=engine) # create all tables
+# Base.metadata.drop_all(bind=engine) # create all tables
 Base.metadata.create_all(bind=engine)  # create all tables
-
 
 
 @jwt_required()
@@ -44,7 +43,7 @@ def home():
 def register():
     Name = request.json['Name']
     Surname = request.json['Surname']
-    Email  = request.json['Email']
+    Email = request.json['Email']
     Password = request.json['Password']
     user = User(Name, Email, Password)
     session.add(user)
@@ -65,10 +64,22 @@ def logout():
 
 
 @app.route("/api/login", methods=['POST'])
-def login(username=None, password=None):
-    user = User.authenticate(username, password)
-    token = user.get_token()
-    return {'access_token': token}
+def login():
+    try:
+        username = request.json['username']
+        password = request.json['password']
+        user = User.authenticate(username, password)
+        token = user.get_token()
+        print(token)
+        return jsonify(
+            {
+                'status': token
+            })
+    except:
+        return jsonify(
+            {
+                'status': "Invalid Credentials"
+            })
 
 # cloude service endpoints
 
