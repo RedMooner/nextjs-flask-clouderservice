@@ -11,7 +11,24 @@ function index() {
   const [password, setPassword] = useState('');
   // отправка запроса на сервер
   const [isAuth, setIsAuth] = useState('');
-
+  function GETProfile() {
+    if (isAuth == "") {
+      return;
+    }
+    console.log(isAuth)
+    // Default options are marked with *
+    const response = fetch("http://localhost:8080/api/profile", {
+      method: "GET", // *GET, POST, PUT, DELETE, etc.
+      mode: "cors", // no-cors, *cors, same-origin
+      credentials: "same-origin", // include, *same-origin, omit
+      headers: {
+        "Authorization": "Bearer " + isAuth,
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      //body: JSON.stringify(data), // body data type must match "Content-Type" header
+    });
+    return response.json()
+  }
   function POSTlogin() {
     const requestOptions = {
       method: 'POST',
@@ -24,10 +41,16 @@ function index() {
       .then((data) => {
         if (data.status === "Invalid Credentials") {
           setIsAuth('');
+          setMessage(data.status);
+
         } else {
           setIsAuth(data.status);
+          setMessage(data.status);
+          if (data.status != "") {
+            console.log(GETProfile());
+          }
+          console.log(isAuth)
         }
-        console.log(isAuth)
       })
 
   }

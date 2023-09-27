@@ -82,6 +82,8 @@ def login():
             })
 
 # cloude service endpoints
+
+
 @app.route("/api/getfiles", methods=['GET'])
 def getfiles():
     decrypt()
@@ -92,6 +94,20 @@ def getfiles():
 def uploadFile():
     encrypt()
     return jsonify("uploadFile")
+
+
+@app.route("/api/profile", methods=['GET'])
+@jwt_required()
+def profile():
+    user_id = get_jwt_identity()
+    user = User.query.filter(User.id == user_id).one()
+    serialized_user = [
+        {
+            'id': user.id,
+            'email': user.email,
+        }
+    ]
+    return jsonify(serialized_user)
 
 
 @app.teardown_appcontext
