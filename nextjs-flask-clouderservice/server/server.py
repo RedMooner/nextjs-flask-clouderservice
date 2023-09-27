@@ -82,8 +82,6 @@ def login():
             })
 
 # cloude service endpoints
-
-
 @app.route("/api/getfiles", methods=['GET'])
 def getfiles():
     decrypt()
