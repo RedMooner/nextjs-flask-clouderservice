@@ -10,7 +10,7 @@ function index() {
   // Пароль
   const [password, setPassword] = useState('');
   // отправка запроса на сервер
-  const [isAuth, setIsAuth] = useState(false);
+  const [isAuth, setIsAuth] = useState('');
 
   function POSTlogin() {
     const requestOptions = {
@@ -22,14 +22,12 @@ function index() {
     fetch('http://localhost:8080/api/login', requestOptions)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data.status)
         if (data.status === "Invalid Credentials") {
-          setIsAuth(false);
+          setIsAuth('');
         } else {
-          setIsAuth(true);
+          setIsAuth(data.status);
         }
         console.log(isAuth)
-
       })
 
   }
