@@ -15,19 +15,24 @@ function index() {
     if (isAuth == "") {
       return;
     }
-    console.log(isAuth)
-    // Default options are marked with *
-    const response = fetch("http://localhost:8080/api/profile", {
-      method: "GET", // *GET, POST, PUT, DELETE, etc.
-      mode: "cors", // no-cors, *cors, same-origin
-      credentials: "same-origin", // include, *same-origin, omit
+    fetch("http://localhost:8080/api/profile", {
+      method: "GET",
+      mode: "cors",
+      credentials: "same-origin",
       headers: {
         "Authorization": "Bearer " + isAuth,
-        // 'Content-Type': 'application/x-www-form-urlencoded',
       },
-      //body: JSON.stringify(data), // body data type must match "Content-Type" header
-    });
-    return response.json()
+    })
+      .then(response => response.json())
+      .then(data => {
+        // тут вы можете работать с данными в формате JSON
+        console.log(data);
+      })
+      .catch(error => {
+        // обработка ошибок
+        console.error("Произошла ошибка:", error);
+      });
+
   }
   function POSTlogin() {
     const requestOptions = {

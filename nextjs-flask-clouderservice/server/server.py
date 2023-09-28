@@ -107,6 +107,7 @@ def profile():
             'email': user.email,
         }
     ]
+    print(str(serialized_user))
     return jsonify(serialized_user)
 
 
