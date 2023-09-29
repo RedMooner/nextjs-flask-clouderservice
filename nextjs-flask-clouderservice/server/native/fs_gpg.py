@@ -40,7 +40,9 @@ def generate_key(first_name, last_name, domain, passphrase=None):
 def encrypt():
     open('my-unencrypted.txt', 'w').write('You need to Google Venn diagram.')
     recipient = debug_mail
-    subprocess.run(['gpg', '--recipient', recipient, '--encrypt', "my-unencrypted.txt", "-y"])
+    subprocess.run(['gpg', '--recipient', recipient,
+                   '--encrypt', "my-unencrypted.txt", "-y"])
+
 
 def decrypt():
     # Укажите путь к файлу, который нужно расшифровать
@@ -49,7 +51,8 @@ def decrypt():
     output_file = 'file.txt'
     # Запустите команду gpg в терминале
     password = '123'
-    result = subprocess.run(['gpg', '--batch', '--passphrase', password, '--output', output_file, '--decrypt', input_file])
+    result = subprocess.run(['gpg', '--batch', '--passphrase',
+                            password, '--output', output_file, '--decrypt', input_file])
 
     if result.returncode == 0:
         # Расшифровка прошла успешно
@@ -61,6 +64,23 @@ def decrypt():
         print('Ошибка расшифровки файла')
 
 
-        
+def get_files_and_folders(foldername="", mail=""):
+    data = {
+        "files": [],
+        "folders": []
+    }
+    print ("../uploads/users/" + mail + "/" + foldername)
+    for root, dirs, files in os.walk("uploads/users/" + mail + "/" + foldername):
+        # Получаем список файлов
+        for file_name in files:
+            data["files"].append(os.path.join(root, file_name))
+
+        # Получаем список папок
+        for dir_name in dirs:
+            data["folders"].append(os.path.join(root, dir_name))
+
+    return data
+
+
 if __name__ == '__main__':
     pass

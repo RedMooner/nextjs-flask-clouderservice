@@ -85,9 +85,11 @@ def login():
 
 
 @app.route("/api/getfiles", methods=['GET'])
+@jwt_required()
 def getfiles():
-    decrypt()
-    return jsonify("getfiles")
+    user_id = get_jwt_identity()
+    user = User.query.filter(User.id == user_id).one()
+    return jsonify(get_files_and_folders('', mail=user.email))
 
 
 @app.route("/api/uploadFile", methods=['GET'])
