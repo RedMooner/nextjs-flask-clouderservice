@@ -15,7 +15,7 @@ function index() {
     if (isAuth == "") {
       return;
     }
-    fetch("http://localhost:8080/api/getfiles", {
+    fetch("http://localhost:8080/api/getfiles/root", {
       method: "GET",
       mode: "cors",
       credentials: "same-origin",
