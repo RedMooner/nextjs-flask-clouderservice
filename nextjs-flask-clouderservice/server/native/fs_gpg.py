@@ -77,6 +77,8 @@ def get_files_and_folders(foldername="", mail=""):
                 data["files"].append(file_path)
             elif os.path.isdir(file_path):
                 data["folders"].append(file_path)
+    else:
+        return "Folder not found"
     return data
 
 
