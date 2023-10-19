@@ -38,10 +38,10 @@ def generate_key(first_name, last_name, domain, passphrase=None):
 
 
 def encrypt():
-    open('my-unencrypted.txt', 'w').write('You need to Google Venn diagram.')
+    open('my-unencrypted2.txt', 'w').write('You need to Google Venn diagram.')
     recipient = debug_mail
     subprocess.run(['gpg', '--recipient', recipient,
-                   '--encrypt', "my-unencrypted.txt", "-y"])
+                   '--encrypt', "my-unencrypted2.txt"])
 
 
 def decrypt():
