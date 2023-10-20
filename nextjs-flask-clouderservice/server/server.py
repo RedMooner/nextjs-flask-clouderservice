@@ -8,11 +8,13 @@ from sqlalchemy.ext.declarative import declarative_base
 from native.fs_gpg import *
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
 from Config import Config
+from flask import send_file
+
 # app instance
 app = Flask(__name__)  # create an instance of Flask
 
 app.config.from_object(Config)
-
+app.config['UPLOAD_FOLDER']='uploads' # make it accessible
 CORS(app)  # enable cross-origin resource sharing
 
 engine = create_engine('sqlite:///database.db')  # database
@@ -84,12 +86,22 @@ def login():
 # cloude service endpoints
 
 
+@app.route('/api/download/<string:filename>' , methods=['GET'])
+@jwt_required()
+def downloadFile(filename):
+    user_id = get_jwt_identity()
+    user = User.query.filter(User.id == user_id).one()
+    folder_path = os.path.join("uploads", "users", user.email, filename)
+    print (folder_path);
+    return send_file(folder_path, as_attachment=True)
+
+
 @app.route("/api/getfiles/<string:path>", methods=['GET'])
 @jwt_required()
 def getfiles(path):
     user_id = get_jwt_identity()
     user = User.query.filter(User.id == user_id).one()
-    if(path == 'root'):
+    if (path == 'root'):
         return jsonify(get_files_and_folders('', mail=user.email))
     return jsonify(get_files_and_folders(path, mail=user.email))
 

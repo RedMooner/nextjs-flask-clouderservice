@@ -107,6 +107,31 @@ function index() {
         console.error("Произошла ошибка:", error);
       });
   }
+  function DownloadFile() {
+    if (isAuth == "") {
+      return;
+    }
+    fetch("http://localhost:8080/api/download/" + folder, {
+      method: "GET",
+      mode: "cors",
+      credentials: "same-origin",
+      headers: {
+        "Authorization": "Bearer " + isAuth,
+      },
+    }).then(response => {
+      response.arrayBuffer().then(buffer => {
+        const url = window.URL.createObjectURL(new Blob([buffer]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', folder);
+        document.body.appendChild(link);
+        link.click();
+      }).catch(error => {
+        // обработка ошибок
+      });
+    });
+  }
+
   return (
     <div>
       <AuthContext.Provider value={{
@@ -127,6 +152,7 @@ function index() {
           value={folder}
           onChange={e => setFolder(e.target.value)} />
         <button onClick={GetFilesFromFolder}>Получить файлы из папки, указанной выше</button>
+        <button onClick={DownloadFile}>Скачать файл из папки, указанной выше</button>
       </AuthContext.Provider>
     </div>
   );
