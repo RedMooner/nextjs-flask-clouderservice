@@ -107,6 +107,7 @@ def getfiles(path):
 
 
 @app.route("/api/upload", methods=['POST'])
+@jwt_required()
 def upload_file():
 	# check if the post request has the file part
 	if 'file' not in request.files:

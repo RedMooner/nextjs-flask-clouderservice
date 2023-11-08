@@ -151,6 +151,7 @@ function index() {
     const config = {
       headers: {
         'content-type': 'multipart/form-data',
+        "Authorization": "Bearer " + isAuth,
       },
     };
     axios.post(url, formData, config).then((response) => {
