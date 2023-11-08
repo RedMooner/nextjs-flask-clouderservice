@@ -1,6 +1,8 @@
+'use client'
 import { AuthContext } from '@/context';
 import { data } from 'autoprefixer';
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 function index() {
   // Сообщение 
@@ -14,6 +16,11 @@ function index() {
   // Папка
   const [folder, setFolder] = useState('');
 
+  const [file, setFile] = useState('');
+
+ 
+
+  
   function getFiles() {
     if (isAuth == "") {
       return;
@@ -131,6 +138,26 @@ function index() {
       });
     });
   }
+  function handleChange(event) {
+    setFile(event.target.files[0])
+  }
+  
+  function handleSubmit(event) {
+    event.preventDefault()
+    const url = 'http://localhost:8080/api/upload';
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('fileName', file.name);
+    const config = {
+      headers: {
+        'content-type': 'multipart/form-data',
+      },
+    };
+    axios.post(url, formData, config).then((response) => {
+      console.log(response.data);
+    });
+
+  }
 
   return (
     <div>
@@ -153,9 +180,16 @@ function index() {
           onChange={e => setFolder(e.target.value)} />
         <button onClick={GetFilesFromFolder}>Получить файлы из папки, указанной выше</button>
         <button onClick={DownloadFile}>Скачать файл из папки, указанной выше</button>
+
+
+        <form onSubmit={handleSubmit}>
+          <h1>React File Upload</h1>
+          <input type="file" onChange={handleChange}/>
+          <button type="submit">Upload</button>
+        </form>
+
       </AuthContext.Provider>
     </div>
   );
 }
-
 export default index; 

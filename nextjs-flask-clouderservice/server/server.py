@@ -8,17 +8,17 @@ from sqlalchemy.ext.declarative import declarative_base
 from native.fs_gpg import *
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
 from Config import Config
-from flask import send_file
+from flask import send_file,flash, request, redirect, url_for
 
+from werkzeug.utils import secure_filename
 # app instance
 app = Flask(__name__)  # create an instance of Flask
 
 app.config.from_object(Config)
-app.config['UPLOAD_FOLDER']='uploads' # make it accessible
+app.config['UPLOAD_FOLDER'] = 'uploads'  # make it accessible
 CORS(app)  # enable cross-origin resource sharing
 
 engine = create_engine('sqlite:///database.db')  # database
-
 
 session = scoped_session(sessionmaker(
     autoflush=False, autocommit=False, bind=engine))  # session
@@ -86,13 +86,13 @@ def login():
 # cloude service endpoints
 
 
-@app.route('/api/download/<string:filename>' , methods=['GET'])
+@app.route('/api/download/<string:filename>', methods=['GET'])
 @jwt_required()
 def downloadFile(filename):
     user_id = get_jwt_identity()
     user = User.query.filter(User.id == user_id).one()
     folder_path = os.path.join("uploads", "users", user.email, filename)
-    print (folder_path);
+    print(folder_path)
     return send_file(folder_path, as_attachment=True)
 
 
@@ -106,10 +106,24 @@ def getfiles(path):
     return jsonify(get_files_and_folders(path, mail=user.email))
 
 
-@app.route("/api/uploadFile", methods=['GET'])
-def uploadFile():
-    encrypt()
-    return jsonify("uploadFile")
+@app.route("/api/upload", methods=['POST'])
+def upload_file():
+	# check if the post request has the file part
+	if 'file' not in request.files:
+		resp = jsonify({'message' : 'No file part in the request'})
+		resp.status_code = 400
+		return resp
+	file = request.files['file']
+	if file.filename == '':
+		resp = jsonify({'message' : 'No file selected for uploading'})
+		resp.status_code = 400
+		return resp
+	if file:
+		filename = secure_filename(file.filename)
+		file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+		resp = jsonify({'message' : 'File successfully uploaded'})
+		resp.status_code = 201
+		return resp
 
 
 @app.route("/api/profile", methods=['GET'])

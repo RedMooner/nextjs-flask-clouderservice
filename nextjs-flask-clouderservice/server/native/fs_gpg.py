@@ -5,7 +5,6 @@ import gnupg
 import subprocess
 from fs import open_fs
 
-
 gpg = gnupg.GPG(homedir="/home/redmoon/.gnupg")
 home_fs = open_fs(".")
 
